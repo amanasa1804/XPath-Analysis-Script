@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XPath Health Dashboard</title>
+  <style>
+    :root {
+      --bg: #0f172a; --surface: #1e293b; --border: #334155;
+      --text: #e2e8f0; --muted: #94a3b8;
+      --critical: #ef4444; --warning: #f59e0b; --info: #3b82f6; --ok: #22c55e;
+      --accent: #6366f1;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; padding: 2rem; }
+    h1 { font-size: 1.6rem; margin-bottom: .25rem; }
+    h2 { font-size: 1.1rem; color: var(--muted); margin: 2rem 0 .75rem; text-transform: uppercase; letter-spacing: .08em; }
+    .meta { color: var(--muted); font-size: .85rem; margin-bottom: 2rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; }
+    .card .label { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; }
+    .card .value { font-size: 2rem; font-weight: 700; margin-top: .3rem; }
+    .card.critical .value { color: var(--critical); }
+    .card.warning  .value { color: var(--warning); }
+    .card.info     .value { color: var(--info); }
+    .card.ok       .value { color: var(--ok); }
+    .score-ring { width: 120px; height: 120px; margin: 0 auto 1rem; position: relative; }
+    .score-ring svg { transform: rotate(-90deg); }
+    .score-ring .val { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+                        font-size: 2rem; font-weight: 800; color: #ef4444; }
+    table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+    th, td { padding: .55rem .75rem; border-bottom: 1px solid var(--border); text-align: left; }
+    th { color: var(--muted); font-weight: 600; }
+    .mono { font-family: 'Cascadia Code', 'Fira Code', monospace; font-size: .78rem; word-break: break-all; }
+    section { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; margin-bottom: 1.5rem; }
+  </style>
+</head>
+<body>
+  <h1>🔍 XPath Health Dashboard</h1>
+  <p class="meta">Repository: <strong>/home/claude/xpath_analyzer/tests</strong> &nbsp;·&nbsp; Scanned: 2026-06-16 00:16</p>
+
+  <!-- Health Score -->
+  <section style="text-align:center; max-width:220px;">
+    <div class="label" style="margin-bottom:.5rem; font-size:.75rem; color:var(--muted); text-transform:uppercase;">Health Score</div>
+    <div class="score-ring">
+      <svg viewBox="0 0 36 36" width="120" height="120">
+        <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#334155" stroke-width="3.5"/>
+        <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#ef4444" stroke-width="3.5"
+                stroke-dasharray="0 100" stroke-linecap="round"/>
+      </svg>
+      <div class="val">0</div>
+    </div>
+  </section>
+
+  <!-- Summary Cards -->
+  <h2>Summary</h2>
+  <div class="grid">
+    <div class="card"><div class="label">Total XPaths</div><div class="value">20</div></div>
+    <div class="card"><div class="label">Unique</div><div class="value">11</div></div>
+    <div class="card critical"><div class="label">Duplicates</div><div class="value">5</div></div>
+    <div class="card critical"><div class="label">Critical Issues</div><div class="value">8</div></div>
+    <div class="card warning"><div class="label">Warnings</div><div class="value">6</div></div>
+    <div class="card info"><div class="label">Info</div><div class="value">1</div></div>
+    <div class="card"><div class="label">Avg Depth</div><div class="value">3.75</div></div>
+    <div class="card"><div class="label">Max Depth</div><div class="value">7</div></div>
+    <div class="card"><div class="label">Avg Length</div><div class="value">29.9</div></div>
+  </div>
+
+  <!-- Rule Hits -->
+  <h2>Issue Breakdown by Rule</h2>
+  <section>
+    <table>
+      <tr><th>Rule</th><th>Count</th></tr>
+      <tr><td>absolute_xpath</td><td>4</td></tr>
+<tr><td>positional_index</td><td>3</td></tr>
+<tr><td>deep_hierarchy</td><td>3</td></tr>
+<tr><td>text_equals</td><td>3</td></tr>
+<tr><td>dynamic_id</td><td>1</td></tr>
+<tr><td>wildcard_star</td><td>1</td></tr>
+    </table>
+  </section>
+
+  <!-- Duplicates -->
+  <h2>Top Duplicate XPaths</h2>
+  <section>
+    <table>
+      <tr><th>XPath</th><th>Uses</th></tr>
+      <tr><td class='mono'>/html/body/div/form/button[1]</td><td>4</td></tr>
+<tr><td class='mono'>//div/section/nav/ul/li/a[@class='profile']</td><td>3</td></tr>
+<tr><td class='mono'>//a[text()='Log Out']</td><td>3</td></tr>
+<tr><td class='mono'>//input[@name='email']</td><td>2</td></tr>
+<tr><td class='mono'>//input[@name='password']</td><td>2</td></tr>
+    </table>
+  </section>
+
+  <!-- Files -->
+  <h2>Top Files by XPath Count</h2>
+  <section>
+    <table>
+      <tr><th>File</th><th>XPaths</th></tr>
+      <tr><td class='mono'>sample_selenium_repo.py</td><td>20</td></tr>
+    </table>
+  </section>
+</body>
+</html>
